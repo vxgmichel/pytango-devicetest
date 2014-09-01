@@ -27,9 +27,9 @@ See the example in the demo for further information.
 
 For a test context, here is a simple example:
 
->>> from devicetest import NodbTangoContext
->>> with NodbTangoContext(MyDevice, properties={}) as proxy:
-...     print proxy.status()
+    >>> from devicetest import NodbTangoContext
+    >>> with NodbTangoContext(MyDevice, properties={}) as proxy:
+    ...     print proxy.voltage
 
 See the code for further information
 
