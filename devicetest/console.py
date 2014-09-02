@@ -6,7 +6,7 @@ from ast import literal_eval
 from PyTango.server import Device
 from importlib import import_module
 from argparse import ArgumentParser
-from devicetest.context import NodbTangoContext
+from devicetest.context import TangoTestContext
 
 
 # Types
@@ -55,7 +55,7 @@ def parse_command_line_args():
 # Main function
 def main():
     device, port, properties = parse_command_line_args()
-    context = NodbTangoContext(device, 
+    context = TangoTestContext(device, 
                                properties=properties, 
                                port=port).start()
     msg = '{0} started on port {1} with properties {2}.'

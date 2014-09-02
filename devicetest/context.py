@@ -31,16 +31,18 @@ def retry(period, errors, pause=0.001):
 def get_port():
     sock = socket()
     sock.bind(('',0))
-    return sock.getsockname()[1]
+    res = sock.getsockname()[1]
+    del sock
+    return res
 
 
 # No database Tango context
-class NodbTangoContext(object):
+class TangoTestContext(object):
     """ Context to run a device without a database."""
 
     nodb = "#dbase=no"
     command = "{} {} -ORBendPoint giop:tcp::{} -file={}"
-    connect_time = 1.0
+    connect_time = 3.0
 
     def __init__(self, device_cls, server=None, instance=None, device=None,
                  properties={}, db="tango.db", port=0):

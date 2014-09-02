@@ -4,7 +4,7 @@
 import os
 import PyTango
 import unittest
-from devicetest.context import NodbTangoContext
+from devicetest.context import TangoTestContext
 
 # Device test case
 class DeviceTestCase(unittest.TestCase):
@@ -27,7 +27,7 @@ class DeviceTestCase(unittest.TestCase):
         PyTango.__leave = lambda *args, **kwargs: None
         # Set up class
         cls.mocking()
-        cls._context = NodbTangoContext(cls.device_cls,
+        cls._context = TangoTestContext(cls.device_cls,
                                         properties=cls.properties,
                                         db=cls.db,
                                         port=cls.port

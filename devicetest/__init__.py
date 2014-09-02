@@ -1,2 +1,2 @@
 from devicetest.case import DeviceTestCase
-from devicetest.context import NodbTangoContext
+from devicetest.context import TangoTestContext
