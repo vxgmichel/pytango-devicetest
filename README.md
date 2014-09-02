@@ -65,7 +65,10 @@ available between the moment it is picked and the moment it is used.
 ## Demo
 
 This repository contains a simple demo of the device test case.
-In order to run the tests, run: python demo/test_device.py.
+In order to run the tests, run: 
+
+    usr@machine:/~python-devicetest$ python demo/test_device.py.
+
 Then take a look at:
 
 - The 'demo/powersupply.py' module. Example of documented HLAPI Device class. 
