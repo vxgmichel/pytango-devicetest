@@ -1,12 +1,15 @@
 ## Synopsis
 
 Resources for Tango device unit testing.
-Contain a test context, a test case and a console interface.
 It is based on the '--file' tango option to run a server without database.
 
-## Requirement
+## Content
 
-This package is required:
+- A tango test context
+- A unittest case
+- A console interface.
+
+## Requirement
 
 - PyTango 8.1.2
 
@@ -19,9 +22,21 @@ The device test case is fully compatible with nosetests and its collector
 
 Run: python setup.py install
 
-## Usage
+## Test context usage
 
-For unit testing, follow these steps:
+Consider this a simple example:
+
+    >>> from devicetest import TangoTestContext
+    >>> from MyServer import MyDevice
+    >>> prop = {"host":"10.10.10.10"}
+    >>> with TangoTestContext(MyDevice, properties=prop) as proxy:
+    ...     print proxy.voltage
+
+See the code for further information
+
+## Unit testing usage
+
+Follow these steps:
 
 - Import and inherit from the DeviceTestCase class
 - Define the mocking class method to patch external libraries
@@ -34,17 +49,9 @@ independant from one another.
 
 See the example in the demo for further information. 
 
-For a test context, here is a simple example:
+## Console usage
 
-    >>> from devicetest import TangoTestContext
-    >>> from MyServer import MyDevice
-    >>> prop = {"host":"10.10.10.10"}
-    >>> with TangoTestContext(MyDevice, properties=prop) as proxy:
-    ...     print proxy.voltage
-
-See the code for further information
-
-For a console usage, consider this example:
+Consider this example:
 
     usr@machine:/~python-devicetest$ python -m devicetest demo.powersupply 
     --prop "{'host':'10.10.10.10'}" --port 10001
