@@ -23,9 +23,6 @@ class DeviceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up device server using the class attributes"""
-        # PyTango patch
-        PyTango.__leave = lambda *args, **kwargs: None
-        # Set up class
         cls.mocking()
         cls._context = TangoTestContext(cls.device_cls,
                                         properties=cls.properties,

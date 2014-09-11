@@ -18,10 +18,10 @@ def retry(period, errors, pause=0.001):
             stop = time() + period
             first = True
             while first or time() < stop:
+                sleep(pause)
                 try:
                     return func(*args, **kwargs)
                 except errors as e:
-                    sleep(pause)
                     first = False
             raise e
         return wrapper
