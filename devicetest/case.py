@@ -14,6 +14,7 @@ class DeviceTestCase(unittest.TestCase):
     db = "tango.db"
     device_cls = None
     properties = {}
+    teardown_timeout = 1.0
 
     @classmethod
     def mocking(cls):
@@ -34,7 +35,7 @@ class DeviceTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         """Kill the device server."""
-        cls._context.stop(1)
+        cls._context.stop(cls.teardown_timeout)
         os.remove(cls.db)
 
     def setUp(self):
