@@ -5,7 +5,10 @@ from socket import socket
 from functools import wraps
 from time import sleep, time
 from threading import Thread
-from PyTango.server import run
+
+# PyTango imports
+try: from PyTango.server import run
+except ImportError: from PyTango.server import server_run as run
 from PyTango import DeviceProxy, Database, ConnectionFailed
 
 # Retry decorator
