@@ -11,7 +11,7 @@ It is based on the '--file' tango option to run a server without database.
 
 ## Requirement
 
-- PyTango 8.1.2
+- PyTango >= 8.1.1
 
 ## Compatibility
 
@@ -50,6 +50,10 @@ independant from one another.
 See the example in the demo for further information. 
 
 ## Console usage
+
+The console interface is useful to run a device with given properties but
+without the TANGO database. It displays the device and server proxy access
+names in order to access the device from somewhere else.
 
 Consider this example:
 
