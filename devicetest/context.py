@@ -47,27 +47,31 @@ class TangoTestContext(object):
     command = "{} {} -ORBendPoint giop:tcp::{} -file={}"
     connect_time = 3.0
 
-    def __init__(self, device_cls, server=None, instance=None, device=None,
-                 properties={}, db="tango.db", port=0, daemon=False):
+    def __init__(self, device, device_cls=None, server_name=None,
+                 instance_name=None, device_name=None, properties={},
+                 db="tango.db", port=0, daemon=False):
         """Inititalize the context to run a given device."""
         # Argument
-        tangoclass = device_cls.__name__
-        if not server: server = tangoclass
-        if not instance: instance = server.lower()
-        if not device: device = 'test/nodb/' + server.lower()
+        tangoclass = device.__name__
+        if not server_name: server_name = tangoclass
+        if not instance_name: instance_name = server_name.lower()
+        if not device_name: device_name = 'test/nodb/' + server_name.lower()
         if not port: port = get_port()
         # Attributes
         self.port = port
-        self.device_name = device
-        self.server_name = "/".join(("dserver", server, instance))
+        self.device_name = device_name
+        self.server_name = "/".join(("dserver", server_name, instance_name))
         self.host = "localhost:{}/".format(self.port)
         self.device = self.server = None
         # File
-        self.generate_db_file(server, instance, device,
-                                        tangoclass, properties, db)
+        self.generate_db_file(server_name, instance_name, device_name,
+                              tangoclass, properties, db)
+        # Tango classes
+        if device_cls: classes = {tangoclass: (device_cls, device)}
+        else: classes = (device,)
         # Thread
-        string = self.command.format(server, instance, port, db)
-        args = ((device_cls,), string.split())
+        string = self.command.format(server_name, instance_name, port, db)
+        args = (classes, string.split())
         self.thread = Thread(target=run, args=args)
         self.thread.daemon = daemon
 

@@ -11,9 +11,11 @@ class DeviceTestCase(unittest.TestCase):
     """Base class for TANGO device unit testing."""
 
     port = 0
-    db = ".tangodb"
+    device = None
     device_cls = None
     properties = {}
+
+    db = ".tangodb"
     teardown_timeout = 1.0
     daemon_thread = False
 
@@ -25,8 +27,13 @@ class DeviceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up device server using the class attributes"""
+        # Mandatory class attributes
+        if cls.device is None:
+            raise ValueError("No Tango device given.")
+        # Mocking and context
         cls.mocking()
-        cls._context = TangoTestContext(cls.device_cls,
+        cls._context = TangoTestContext(cls.device,
+                                        cls.device_cls,
                                         properties=cls.properties,
                                         db=cls.db,
                                         port=cls.port,

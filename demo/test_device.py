@@ -16,7 +16,7 @@ from devicetest import DeviceTestCase
 class TspDeviceTestCase(DeviceTestCase):
     """Test case for packet generation."""
 
-    device_cls = powersupply.PowerSupply
+    device = powersupply.PowerSupply
     properties = {'host':'10.10.10.10'}
 
     @classmethod
