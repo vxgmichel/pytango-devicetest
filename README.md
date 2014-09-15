@@ -40,9 +40,10 @@ See the code for further information
 Follow these steps:
 
 - Import and inherit from the DeviceTestCase class
-- Set the "device" class attribute with the Device or Device_4Impl class
-- Set the "device_cls" class attribute with the DeviceClass if not using HLAPI
-- Set the "properties" class attribute with the corresponding dictionnary.
+- Set the following class attributes:
+   - device: the Device or Device_4Impl class to test.
+   - device_cls: the DeviceClass class if testing an old style device.
+   - properties: the corresponding dictionnary.
 - Define the mocking class method to patch external libraries
 - Write tests using the device proxy 'self.device' and the mock objects.
 - It is possible to change the return values of the mock objects at runtime. 
