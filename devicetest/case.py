@@ -11,10 +11,11 @@ class DeviceTestCase(unittest.TestCase):
     """Base class for TANGO device unit testing."""
 
     port = 0
-    db = "tango.db"
+    db = ".tangodb"
     device_cls = None
     properties = {}
     teardown_timeout = 1.0
+    daemon_thread = False
 
     @classmethod
     def mocking(cls):
@@ -28,7 +29,8 @@ class DeviceTestCase(unittest.TestCase):
         cls._context = TangoTestContext(cls.device_cls,
                                         properties=cls.properties,
                                         db=cls.db,
-                                        port=cls.port
+                                        port=cls.port,
+                                        daemon=cls.daemon_thread,
                                         ).start()
         cls.device = cls._context.device
         
@@ -42,4 +44,11 @@ class DeviceTestCase(unittest.TestCase):
         """Prepare a test environment"""
         self.mocking()
         self.device.Init()
+
+
+# Windows patch
+import platform
+if platform.system() == "Windows":
+    DeviceTestCase.teardown_timeout = 0.0
+    DeviceTestCase.daemon_thread = True
 

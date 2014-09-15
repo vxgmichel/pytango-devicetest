@@ -48,7 +48,7 @@ class TangoTestContext(object):
     connect_time = 3.0
 
     def __init__(self, device_cls, server=None, instance=None, device=None,
-                 properties={}, db="tango.db", port=0):
+                 properties={}, db="tango.db", port=0, daemon=False):
         """Inititalize the context to run a given device."""
         # Argument
         tangoclass = device_cls.__name__
@@ -69,6 +69,7 @@ class TangoTestContext(object):
         string = self.command.format(server, instance, port, db)
         args = ((device_cls,), string.split())
         self.thread = Thread(target=run, args=args)
+        self.thread.daemon = daemon
 
     @staticmethod
     def generate_db_file(server, instance, device,

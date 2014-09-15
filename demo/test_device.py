@@ -2,8 +2,8 @@
 
 # Path
 import sys, os
-sys.path.append(os.getcwd())
-sys.path.append(os.getcwd()+"/..")
+path = os.path.join(os.path.dirname(__file__), os.pardir)
+sys.path.insert(0, os.path.abspath(path))
 
 # Imports
 import powersupply
