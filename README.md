@@ -15,8 +15,9 @@ It is based on the '--file' tango option to run a server without database.
 
 ## Compatibility
 
-The device test case is fully compatible with nosetests and its collector
-'nosetests.collector' for the 'test_suite' setuptools option.
+The device test case is fully compatible with old and new style Tango devices.
+It is also compatible with nosetests and its collector 'nosetests.collector'
+for the 'test_suite' setuptools option.
 
 ## Installation
 
@@ -39,6 +40,9 @@ See the code for further information
 Follow these steps:
 
 - Import and inherit from the DeviceTestCase class
+- Set the "device" class attribute with the Device or Device_4Impl class
+- Set the "device_cls" class attribute with the DeviceClass if not using HLAPI
+- Set the "properties" class attribute with the corresponding dictionnary.
 - Define the mocking class method to patch external libraries
 - Write tests using the device proxy 'self.device' and the mock objects.
 - It is possible to change the return values of the mock objects at runtime. 
