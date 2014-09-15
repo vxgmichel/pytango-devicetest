@@ -24,7 +24,7 @@ Run: python setup.py install
 
 ## Test context usage
 
-Consider this a simple example:
+Consider this simple example:
 
     >>> from devicetest import TangoTestContext
     >>> from MyServer import MyDevice
