@@ -63,7 +63,7 @@ names in order to access the device from somewhere else.
 Consider this example:
 
     usr@machine:/~python-devicetest$ python -m devicetest demo.powersupply 
-    --prop "{'host':'10.10.10.10'}" --port 10001
+    --prop "{'host':'10.10.10.10'}" --port 10001 --debug 3
     Ready to accept request
     PowerSupply started on port 10001 with properties {'host': '10.10.10.10'}.
     Device access: localhost:10001/test/nodb/powersupply#dbase=no

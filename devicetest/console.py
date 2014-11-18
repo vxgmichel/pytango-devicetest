@@ -43,6 +43,10 @@ def parse_command_line_args():
     parser.add_argument('--port', metavar='PORT',
                       type=int, help=msg, default=0)
 
+    msg = "The debug level."
+    parser.add_argument('--debug', metavar='DEBUG',
+                      type=int, help=msg, default=0)
+
     msg = "The properties to set as python dict."
     parser.add_argument('--prop', metavar='PROP',
                       type=literal_dict, help=msg, default='{}')
@@ -50,14 +54,15 @@ def parse_command_line_args():
 
     args = parser.parse_args()
     device = get_device(args.module[0])
-    return device, args.port, args.prop
+    return device, args.port, args.prop, args.debug
 
 # Main function
 def main():
-    device, port, properties = parse_command_line_args()
+    device, port, properties, debug = parse_command_line_args()
     context = TangoTestContext(device, 
                                properties=properties, 
-                               port=port).start()
+                               port=port,
+                               debug=debug).start()
     msg = '{0} started on port {1} with properties {2}.'
     print(msg.format(device.__name__, context.port, properties))
     print('Device access: {}'.format(context.get_device_access()))

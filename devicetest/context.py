@@ -44,12 +44,12 @@ class TangoTestContext(object):
     """ Context to run a device without a database."""
 
     nodb = "#dbase=no"
-    command = "{} {} -ORBendPoint giop:tcp::{} -file={}"
+    command = "{0} {1} -ORBendPoint giop:tcp::{2} -file={3}"
     connect_time = 3.0
 
     def __init__(self, device, device_cls=None, server_name=None,
                  instance_name=None, device_name=None, properties={},
-                 db="tango.db", port=0, daemon=False):
+                 db="tango.db", port=0, debug=0, daemon=False):
         """Inititalize the context to run a given device."""
         # Argument
         tangoclass = device.__name__
@@ -61,7 +61,7 @@ class TangoTestContext(object):
         self.port = port
         self.device_name = device_name
         self.server_name = "/".join(("dserver", server_name, instance_name))
-        self.host = "localhost:{}/".format(self.port)
+        self.host = "localhost:{0}/".format(self.port)
         self.device = self.server = None
         # File
         self.generate_db_file(server_name, instance_name, device_name,
@@ -71,9 +71,11 @@ class TangoTestContext(object):
         else: classes = (device,)
         # Thread
         string = self.command.format(server_name, instance_name, port, db)
+        string += " -v{0}".format(debug) if debug else ""
         args = (classes, string.split())
         self.thread = Thread(target=run, args=args)
         self.thread.daemon = daemon
+        print string
 
     @staticmethod
     def generate_db_file(server, instance, device,

@@ -16,6 +16,7 @@ class DeviceTestCase(unittest.TestCase):
     properties = {}
 
     db = ".tangodb"
+    debug = 0
     teardown_timeout = 1.0
     daemon_thread = False
 
@@ -37,6 +38,7 @@ class DeviceTestCase(unittest.TestCase):
                                         properties=cls.properties,
                                         db=cls.db,
                                         port=cls.port,
+                                        debug=cls.debug,
                                         daemon=cls.daemon_thread,
                                         ).start()
         cls.device = cls._context.device
