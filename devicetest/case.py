@@ -2,12 +2,20 @@
 
 # Imports
 import os
-import PyTango
-import unittest
+import sys
+
+# Import unittest
+if sys.version_info < (2, 7):
+    from unittest2 import TestCase
+else:
+    from unittest import TestCase
+
+# Import context
 from devicetest.context import TangoTestContext
 
+
 # Device test case
-class DeviceTestCase(unittest.TestCase):
+class DeviceTestCase(TestCase):
     """Base class for TANGO device unit testing."""
 
     port = 0
@@ -24,7 +32,7 @@ class DeviceTestCase(unittest.TestCase):
     def mocking(cls):
         """Mock the librairies. To override."""
         pass
-    
+
     @classmethod
     def setUpClass(cls):
         """Set up device server using the class attributes"""
@@ -42,7 +50,7 @@ class DeviceTestCase(unittest.TestCase):
                                         daemon=cls.daemon_thread,
                                         ).start()
         cls.device = cls._context.device
-        
+
     @classmethod
     def tearDownClass(cls):
         """Kill the device server."""
@@ -60,4 +68,3 @@ import platform
 if platform.system() == "Windows":
     DeviceTestCase.teardown_timeout = 0.0
     DeviceTestCase.daemon_thread = True
-
