@@ -6,16 +6,16 @@ import sys
 
 # Import unittest
 if sys.version_info < (2, 7):
-    from unittest2 import TestCase
+    import unittest2 as unittest
 else:
-    from unittest import TestCase
+    import unittest
 
 # Import context
 from devicetest.context import TangoTestContext
 
 
 # Device test case
-class DeviceTestCase(TestCase):
+class DeviceTestCase(unittest.TestCase):
     """Base class for TANGO device unit testing."""
 
     port = 0
