@@ -6,15 +6,20 @@ from functools import wraps
 from time import sleep, time
 from threading import Thread
 
+
 # PyTango imports
-try: from PyTango.server import run
-except ImportError: from PyTango.server import server_run as run
+try:
+    from PyTango.server import run
+except ImportError:
+    from PyTango.server import server_run as run
 from PyTango import DeviceProxy, Database, ConnectionFailed
+
 
 # Retry decorator
 def retry(period, errors, pause=0.001):
     """Retry decorator."""
     errors = tuple(errors)
+
     def dec(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -30,10 +35,11 @@ def retry(period, errors, pause=0.001):
         return wrapper
     return dec
 
+
 # Get available port
 def get_port():
     sock = socket()
-    sock.bind(('',0))
+    sock.bind(('', 0))
     res = sock.getsockname()[1]
     del sock
     return res
@@ -53,10 +59,14 @@ class TangoTestContext(object):
         """Inititalize the context to run a given device."""
         # Argument
         tangoclass = device.__name__
-        if not server_name: server_name = tangoclass
-        if not instance_name: instance_name = server_name.lower()
-        if not device_name: device_name = 'test/nodb/' + server_name.lower()
-        if not port: port = get_port()
+        if not server_name:
+            server_name = tangoclass
+        if not instance_name:
+            instance_name = server_name.lower()
+        if not device_name:
+            device_name = 'test/nodb/' + server_name.lower()
+        if not port:
+            port = get_port()
         # Attributes
         self.port = port
         self.device_name = device_name
@@ -67,15 +77,16 @@ class TangoTestContext(object):
         self.generate_db_file(server_name, instance_name, device_name,
                               tangoclass, properties, db)
         # Tango classes
-        if device_cls: classes = {tangoclass: (device_cls, device)}
-        else: classes = (device,)
+        if device_cls:
+            classes = {tangoclass: (device_cls, device)}
+        else:
+            classes = (device,)
         # Thread
         string = self.command.format(server_name, instance_name, port, db)
         string += " -v{0}".format(debug) if debug else ""
         args = (classes, string.split())
         self.thread = Thread(target=run, args=args)
         self.thread.daemon = daemon
-        print string
 
     @staticmethod
     def generate_db_file(server, instance, device,
@@ -127,4 +138,3 @@ class TangoTestContext(object):
     def __exit__(self, exc_type, exception, trace):
         """Exit method for context support."""
         self.stop()
-
