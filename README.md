@@ -62,7 +62,7 @@ names in order to access the device from somewhere else.
 
 Consider this example:
 
-    usr@machine:/~python-devicetest$ python -m devicetest demo.powersupply 
+    .../python-devicetest$ python -m devicetest demo.powersupply.PowerSupply
     --prop "{'host':'10.10.10.10'}" --port 10001 --debug 3
     Ready to accept request
     PowerSupply started on port 10001 with properties {'host': '10.10.10.10'}.
@@ -83,7 +83,7 @@ available between the moment it is picked and the moment it is used.
 This repository contains a simple demo of the device test case.
 In order to run the tests, run: 
 
-    usr@machine:/~python-devicetest$ python demo/test_device.py.
+    usr@machine:/~python-devicetest$ python demo/test_device.py
 
 Then take a look at:
 
