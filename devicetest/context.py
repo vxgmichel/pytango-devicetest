@@ -94,11 +94,17 @@ class TangoTestContext(object):
         """Generate a database file corresponding to the given arguments."""
         if not tangoclass:
             tangoclass = server
+        # Open the file
         with open(db, 'w') as f:
             f.write("/".join((server, instance, "DEVICE", tangoclass)))
             f.write(': "' + device + '"\n')
+        # Create database
         db = Database(db)
-        db.put_device_property(device, properties)
+        # Patched the property dict to avoid a PyTango bug
+        patched = dict((key, value if value != '' else ' ')
+                       for key, value in properties.items())
+        # Write properties
+        db.put_device_property(device, patched)
         return db
 
     def get_device_access(self):
