@@ -110,8 +110,8 @@ $ python demo/test_device.py
 
 Then take a look at:
 
-- The 'demo/powersupply.py' module. Example of documented HLAPI Device class.
-- The 'demo/test_device.py' module. Contain the unit tests.
+- The [demo/powersupply.py] module. Example of documented HLAPI Device class.
+- The [demo/test_device.py] module. Contain the unit tests.
 
 Note that these 3 tests should run in less than 50 ms. Even for a more
 complicated Tango device, if all the external libraries are patched, the
