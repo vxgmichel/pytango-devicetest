@@ -2,7 +2,7 @@ tangotest
 =========
 
 Unit-testing for PyTango device.
-It is based on the '--file' tango option to run a server without database.
+It is based on the `--file` tango option to run a server without database.
 
 
 Content
@@ -22,8 +22,8 @@ Compatibility
 -------------
 
 The device test case is fully compatible with old and new style Tango devices.
-It is also compatible with nosetests and its collector 'nosetests.collector'
-for the 'test_suite' setuptools option.
+It is also compatible with nosetests and its collector `nosetests.collector`
+for the `test_suite` setuptools option.
 
 
 Installation
@@ -56,8 +56,8 @@ Follow these steps:
 
 - Import and inherit from the DeviceTestCase class
 - Set the following class attributes:
-   - device: the Device or Device_4Impl class to test.
-   - device_cls: the DeviceClass class if testing an old style device.
+   - device: the `Device` or `Device_4Impl` class to test.
+   - device_cls: the `DeviceClass` class if testing an old style device.
    - properties: the corresponding dictionnary.
 - Define the mocking class method to patch external libraries
 - Write tests using the device proxy 'self.device' and the mock objects.
@@ -80,7 +80,8 @@ names in order to access the device from somewhere else.
 Consider this example:
 
 ```bash
-$ python -m devicetest demo.powersupply.PowerSupply --prop \ "{'host':'10.10.10.10'}" --port 10001 --debug 3
+$ python -m devicetest demo.powersupply.PowerSupply --prop \
+"{'host':'10.10.10.10'}" --port 10001 --debug 3
 Ready to accept request
 PowerSupply started on port 10001 with properties {'host': '10.10.10.10'}.
 Device access: localhost:10001/test/nodb/powersupply#dbase=no
@@ -92,10 +93,10 @@ Or see the help:
 $ python -m devicetest -h
 ```
 
-Note that this package also include a port detection feature.
-If 0 or no port is given, the context object will pick a random free port
-between 1024 to 65535. However, note that the port is not guaranteed to stay
-available between the moment it is picked and the moment it is used.
+Note that this package also include a port detection feature. If 0 or no port
+is given, the context object will pick a random free port between 1024
+to 65535. However, note that the port is not guaranteed to stay available
+between the moment it is picked and the moment it is used.
 
 Demo
 ----
@@ -112,10 +113,10 @@ Then take a look at:
 - The 'demo/powersupply.py' module. Example of documented HLAPI Device class.
 - The 'demo/test_device.py' module. Contain the unit tests.
 
-Note that these 3 tests should run in less than 50 ms.
-Even for a more complicated Tango device, if all the external libraries are
-patched, the execution shoudn't take more than a few hundred milliseconds.
-This makes it valid unitesting for continuous integration.
+Note that these 3 tests should run in less than 50 ms. Even for a more
+complicated Tango device, if all the external libraries are patched, the
+execution shoudn't take more than a few hundred milliseconds. This makes it
+valid unitesting for continuous integration.
 
 
 Warning
@@ -123,14 +124,14 @@ Warning
 
 This package is still in development and has a few limitations:
 
-- Using a test context twice will produce a segmentation fault
-  and stop the execution.
+- Using a test context twice will produce a segmentation fault and stop the
+  execution.
 - Properties cannot be changed at runtime.
   I haven't found a single way to access the virtual database.
-- Tango events are not supported by the '--file' execution mode.
+- Tango events are not supported by the `--file` execution mode.
   See the Tango documentation for further information.
-- Sadly, it is not compatible with the coverage tool "coverage".
-  This is because the Tango layers mess up with the coverage collector.
+- Sadly, it is not compatible with the coverage tool `coverage`. This is
+  because the Tango layers mess up with the coverage collector.
 
 
 Contact
