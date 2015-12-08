@@ -118,6 +118,9 @@ complicated Tango device, if all the external libraries are patched, the
 execution shoudn't take more than a few hundred milliseconds. This makes it
 valid unitesting for continuous integration.
 
+[demo/powersupply.py]: demo/powersupply.py
+[demo/test_device.py]: demo/test_device.py
+
 
 Warning
 -------
