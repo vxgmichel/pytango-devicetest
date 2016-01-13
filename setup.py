@@ -6,5 +6,6 @@ setup(name = "python-devicetest",
       version = "0.1.1",
       description = "Resources for Tango device unit testing.",
       packages = ['devicetest'],
+      install_requires = ['unittest2'],
       include_package_data=True,
      )
