@@ -76,16 +76,22 @@ class TangoTestContext(object):
         # File
         self.generate_db_file(server_name, instance_name, device_name,
                               tangoclass, properties, db)
-        # Tango classes
-        if device_cls:
-            classes = {tangoclass: (device_cls, device)}
-        else:
-            classes = (device,)
-        # Thread
+        # Command args
         string = self.command.format(server_name, instance_name, port, db)
         string += " -v{0}".format(debug) if debug else ""
-        args = (classes, string.split())
-        self.thread = Thread(target=run, args=args)
+        cmd_args = string.split()
+        # Target and arguments
+        if device_cls:
+            target = run
+            args = ({tangoclass: (device_cls, device)}, cmd_args)
+        elif not hasattr(device, 'run_server'):
+            target = run
+            args = ((device,), cmd_args)
+        else:
+            target = device.run_server
+            args = (cmd_args,)
+        # Thread
+        self.thread = Thread(target=target, args=args)
         self.thread.daemon = daemon
 
     @staticmethod
