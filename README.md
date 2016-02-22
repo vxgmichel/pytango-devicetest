@@ -1,7 +1,7 @@
-tangotest
-=========
+devicetest
+==========
 
-Unit-testing for PyTango device.
+Unit-testing for PyTango devices.
 It is based on the `--file` tango option to run a server without database.
 
 
