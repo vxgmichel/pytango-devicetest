@@ -1,6 +1,7 @@
 """Contain the context to run a device without a database."""
 
 # Imports
+import platform
 from socket import socket
 from functools import wraps
 from time import sleep, time
@@ -71,7 +72,7 @@ class TangoTestContext(object):
         self.port = port
         self.device_name = device_name
         self.server_name = "/".join(("dserver", server_name, instance_name))
-        self.host = "localhost:{0}/".format(self.port)
+        self.host="{0}:{1}/".format(platform.node(), self.port)
         self.device = self.server = None
         # File
         self.generate_db_file(server_name, instance_name, device_name,
