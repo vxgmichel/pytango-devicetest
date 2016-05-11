@@ -72,7 +72,7 @@ class TangoTestContext(object):
         self.port = port
         self.device_name = device_name
         self.server_name = "/".join(("dserver", server_name, instance_name))
-        self.host="{0}:{1}/".format(platform.node(), self.port)
+        self.host = "{0}:{1}/".format(platform.node(), self.port)
         self.device = self.server = None
         # File
         self.generate_db_file(server_name, instance_name, device_name,
