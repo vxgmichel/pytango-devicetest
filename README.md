@@ -131,8 +131,8 @@ This package is still in development and has a few limitations:
   execution.
 - Properties cannot be changed at runtime.
   I haven't found a single way to access the virtual database.
-- Tango events are not supported by the `--file` execution mode.
-  See the Tango documentation for further information.
+- ZMQ events are not supported by the `--file` execution mode in Tango 8.
+  It does work with Tango 9 though.
 - Sadly, it is not compatible with the coverage tool `coverage`. This is
   because the Tango layers mess up with the coverage collector.
 
