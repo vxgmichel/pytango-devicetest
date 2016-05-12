@@ -7,11 +7,13 @@ from mock import Mock
 # Singleton decorator
 def singleton(cls):
     """Implement the singleton pattern."""
-    return cls()
+    cls.__call__ = staticmethod(lambda : instance)
+    instance = cls()
+    return instance
 
 # Patcher singleton
 @singleton
-class Patcher():
+class Patcher(object):
     """Singleton to patch the device proxy class."""
 
     def __init__(self):
@@ -22,17 +24,17 @@ class Patcher():
         error = NotImplementedError(msg)
         self.MockDeviceProxy = Mock(name="DeviceProxy",
                                     side_effect=error)
-    
+
     def patch_device_proxy(self):
         """Mock the device prxy class and return it."""
         if self.ActualDeviceProxy is None:
             self.ActualDeviceProxy = PyTango.DeviceProxy
             PyTango.DeviceProxy = self.MockDeviceProxy
         return PyTango.DeviceProxy
-        
-    def unpatch_device_proxy():
+
+    def unpatch_device_proxy(self):
         """Unmock the device prxy class and return it."""
-        if ActualDeviceProxy is not None:
+        if self.ActualDeviceProxy is not None:
             PyTango.DeviceProxy = self.ActualDeviceProxy
             self.ActualDeviceProxy = None
         return PyTango.DeviceProxy
@@ -43,4 +45,4 @@ class Patcher():
 
     def __exit__(self, exc_type, exception, trace):
         """Exit method for context support."""
-        unpatch_device_proxy()
+        self.unpatch_device_proxy()
