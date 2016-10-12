@@ -4,12 +4,14 @@
 import PyTango
 from mock import Mock
 
+
 # Singleton decorator
 def singleton(cls):
     """Implement the singleton pattern."""
-    cls.__call__ = staticmethod(lambda : instance)
+    cls.__call__ = staticmethod(lambda: instance)
     instance = cls()
     return instance
+
 
 # Patcher singleton
 @singleton
