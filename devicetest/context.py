@@ -1,19 +1,18 @@
 """Contain the context to run a device without a database."""
 
 # Imports
+import os
 import platform
+import tempfile
 from socket import socket
 from functools import wraps
 from time import sleep, time
 from threading import Thread
-
+from multiprocessing import Process
 
 # PyTango imports
-try:
-    from PyTango.server import run
-except ImportError:
-    from PyTango.server import server_run as run
-from PyTango import DeviceProxy, Database, ConnectionFailed
+from tango.server import run
+from tango import DeviceProxy, Database, ConnectionFailed, DevFailed
 
 
 # Retry decorator
@@ -30,7 +29,8 @@ def retry(period, errors, pause=0.001):
                 sleep(pause)
                 try:
                     return func(*args, **kwargs)
-                except errors as e:
+                except errors as exc:
+                    e = exc
                     first = False
             raise e
         return wrapper
@@ -52,11 +52,11 @@ class TangoTestContext(object):
 
     nodb = "#dbase=no"
     command = "{0} {1} -ORBendPoint giop:tcp::{2} -file={3}"
-    connect_time = 3.0
+    connect_time = 6.0
 
     def __init__(self, device, device_cls=None, server_name=None,
                  instance_name=None, device_name=None, properties={},
-                 db="tango.db", port=0, debug=0, daemon=False):
+                 db=None, port=0, debug=5, daemon=False, process=False):
         """Inititalize the context to run a given device."""
         # Argument
         tangoclass = device.__name__
@@ -68,7 +68,10 @@ class TangoTestContext(object):
             device_name = 'test/nodb/' + server_name.lower()
         if not port:
             port = get_port()
+        if db is None:
+            _, db = tempfile.mkstemp()
         # Attributes
+        self.db = db
         self.port = port
         self.device_name = device_name
         self.server_name = "/".join(("dserver", server_name, instance_name))
@@ -76,7 +79,7 @@ class TangoTestContext(object):
         self.device = self.server = None
         # File
         self.generate_db_file(server_name, instance_name, device_name,
-                              tangoclass, properties, db)
+                              tangoclass, properties)
         # Command args
         string = self.command.format(server_name, instance_name, port, db)
         string += " -v{0}".format(debug) if debug else ""
@@ -92,21 +95,21 @@ class TangoTestContext(object):
             target = device.run_server
             args = (cmd_args,)
         # Thread
-        self.thread = Thread(target=target, args=args)
+        cls = Process if process else Thread
+        self.thread = cls(target=target, args=args)
         self.thread.daemon = daemon
 
-    @staticmethod
-    def generate_db_file(server, instance, device,
-                         tangoclass=None, properties={}, db="tango.db"):
+    def generate_db_file(self, server, instance, device,
+                         tangoclass=None, properties={}):
         """Generate a database file corresponding to the given arguments."""
         if not tangoclass:
             tangoclass = server
         # Open the file
-        with open(db, 'w') as f:
+        with open(self.db, 'w') as f:
             f.write("/".join((server, instance, "DEVICE", tangoclass)))
             f.write(': "' + device + '"\n')
         # Create database
-        db = Database(db)
+        db = Database(self.db)
         # Patched the property dict to avoid a PyTango bug
         patched = dict((key, value if value != '' else ' ')
                        for key, value in properties.items())
@@ -128,23 +131,26 @@ class TangoTestContext(object):
         self.connect()
         return self
 
-    @retry(connect_time, [ConnectionFailed])
+    @retry(connect_time, [ConnectionFailed, DevFailed])
     def connect(self):
         self.device = DeviceProxy(self.get_device_access())
+        self.device.ping()
         self.server = DeviceProxy(self.get_server_access())
+        self.server.ping()
 
     def stop(self, timeout=None):
         """Kill the server."""
         if self.server:
-            self.server.Kill()
+            self.server.command_inout('Kill')
         self.thread.join(timeout)
+        os.unlink(self.db)
 
     def join(self, timeout=None):
         self.thread.join(timeout)
 
     def __enter__(self):
         """Enter method for context support."""
-        if not self.thread.isAlive():
+        if not self.thread.is_alive():
             self.start()
         return self.device
 
