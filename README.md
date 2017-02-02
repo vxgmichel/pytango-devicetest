@@ -4,6 +4,8 @@ devicetest
 Unit-testing for PyTango devices.
 It is based on the `--file` tango option to run a server without database.
 
+**This project is no longer maintained since similar features and more have
+been added to `pytango` in the `tango.test_context` module since version `9.2.1`.**
 
 Content
 -------
