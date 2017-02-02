@@ -11,8 +11,11 @@ from threading import Thread
 from multiprocessing import Process
 
 # PyTango imports
-from tango.server import run
-from tango import DeviceProxy, Database, ConnectionFailed, DevFailed
+try:
+    from PyTango.server import run
+except ImportError:
+    from PyTango.server import server_run as run
+from PyTango import DeviceProxy, Database, ConnectionFailed, DevFailed
 
 
 # Retry decorator
